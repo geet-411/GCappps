@@ -1,7 +1,10 @@
 package com.GCappps.loanFin.app.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,5 +25,5 @@ public class EnquiryDetails {
 	private String customerMobileNumber;
 	private String pancardNumber;
 	private String enquiryStatus;
-	
+	private Integer cibilScore;
 }
