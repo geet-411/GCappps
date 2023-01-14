@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class LoanDisbursement {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	
 	private String loanId;
 	private String amountPayType;
 	private Double totalAmount;

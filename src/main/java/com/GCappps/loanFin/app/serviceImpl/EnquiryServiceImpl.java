@@ -22,7 +22,7 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 	public EnquiryDetails customerEnquiry(EnquiryDetails enquiryDetails) {
 
 		enquiryDetails.setEnquiryId("GCappps-Enq-" + r.nextInt(9999));//
-
+		enquiryDetails.setEnquiryStatus("enquiry");
 		EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);
 		return enquiryDetails2;
 	}

@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class LocalAddress {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String localAddressId;
 	private String areaName;
 	private String cityName;

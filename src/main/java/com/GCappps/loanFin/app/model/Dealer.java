@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Dealer {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String dealerId;
 	private String dealerName;
 	private String dealerLocation;

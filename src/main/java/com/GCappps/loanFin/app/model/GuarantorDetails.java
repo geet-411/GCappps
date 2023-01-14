@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class GuarantorDetails {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String guarantorId;
 	private String guarantorName;
 	private String guarantorRelation;

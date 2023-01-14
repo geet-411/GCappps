@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class CustomerAccountDetails {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String accountId;
 	private String accountType;
 	private String accountNumber;

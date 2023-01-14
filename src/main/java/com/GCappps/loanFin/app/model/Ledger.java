@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Ledger {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	
 	private String ledgerId;
 	private String ledgerCreatedDate;
 	private Double totalLoanAmount;

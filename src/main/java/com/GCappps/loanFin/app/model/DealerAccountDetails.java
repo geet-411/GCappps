@@ -17,7 +17,6 @@ public class DealerAccountDetails {
 
 	
 		@Id
-		@GeneratedValue(strategy = GenerationType.AUTO)
 		private String accountId;
 		private String accountType;
 		private String accountNumber;

@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class CustomerAddress {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String customerAddress;
 	
 	
