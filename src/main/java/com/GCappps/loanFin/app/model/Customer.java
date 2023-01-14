@@ -56,8 +56,8 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Documents customerDocuments;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private Cibil customerCibilScore;
+//	@OneToOne(cascade = CascadeType.ALL)
+//	private Cibil customerCibilScore;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private CustomerAccountDetails customerAccountDetails;
