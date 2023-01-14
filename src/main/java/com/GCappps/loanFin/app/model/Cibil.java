@@ -14,9 +14,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Cibil {
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String cibilId;
+	
+	
 	private String cibilScore;
 	private String cibilGeneratedDate;
 	private String remark;

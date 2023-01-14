@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,12 @@ public class Dealer {
 	private String dealerName;
 	private String dealerLocation;
 	private String dealerLicenceId;
+	
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private DealerAccountDetails dealerAccountDetails;
+	
+	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Vehicle> vehicleData;
 
