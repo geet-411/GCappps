@@ -17,12 +17,12 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 
 	@Autowired
 	EnquiryRepository enquiryRepository;
-
+	Random r = new Random(999);
 
 	public EnquiryDetails customerEnquiry(EnquiryDetails enquiryDetails) {
 
-		
-		
+		enquiryDetails.setEnquiryId("GCappps-Enq-" + r.nextInt(9999));//
+
 		EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);
 		return enquiryDetails2;
 	}
@@ -40,8 +40,14 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 
 	@Override
 	public Optional<EnquiryDetails> cibilScoreCheck(String enquieryId) {
-		
+
 		return enquiryRepository.findById(enquieryId);
+	}
+
+	public EnquiryDetails updateEnquiry(EnquiryDetails enquiryDetails) {
+		enquiryDetails.setEnquiryStatus("Enquired");
+		EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);
+		return enquiryDetails2;
 	}
 
 }

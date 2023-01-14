@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Profession {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String professionId;
 	
 	private String professionDesignation;

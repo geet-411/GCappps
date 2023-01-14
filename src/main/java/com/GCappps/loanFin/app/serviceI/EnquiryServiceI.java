@@ -15,4 +15,6 @@ public interface EnquiryServiceI {
 
 	public Optional<EnquiryDetails> cibilScoreCheck(String enquieryId);
 
+	public EnquiryDetails updateEnquiry(EnquiryDetails enquiryDetails);
+
 }
