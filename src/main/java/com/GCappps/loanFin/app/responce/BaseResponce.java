@@ -11,4 +11,5 @@ public class BaseResponce<T> {
 private Integer statusCode;
 private String msg;
 private T responceData;
+
 }

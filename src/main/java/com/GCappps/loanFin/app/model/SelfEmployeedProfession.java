@@ -1,6 +1,8 @@
 package com.GCappps.loanFin.app.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -11,15 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Cibil {
-
+public class SelfEmployeedProfession {
 	@Id
-	private String cibilId;
-	private String cibilScore;
-	private String cibilGeneratedDateTime;
-	private String remark;
-	private String previousEmi;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private String selfEmployeedProfessionId;
+	private String itrDocument;
 	
-	
-	
+
 }
