@@ -8,31 +8,20 @@ import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class EnquiryDetails {
+public class DealerAccountDetails {
 	
 
 	
 		@Id
 		@GeneratedValue(strategy = GenerationType.AUTO)
-		private String customerEnquiryId;
-		private String customerFirstName;
-		private String customerMiddleName;
-		private String customerLastName;
-		
-		private String customerDataOfBirth;
-		private String customerEmail;
-		private Double cutomerMobileNumber;
-		private String customerPancardNumber;
-		private String cutomerEnquiryStatus;
-		
+		private String accountId;
+		private String accountType;
+		private String accountNumber;
+		private String accountIFSCCode;
+		private String accountHolderName;
 
-
-
-	}
-
-
+}
