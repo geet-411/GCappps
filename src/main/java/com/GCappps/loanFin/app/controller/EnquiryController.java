@@ -27,15 +27,16 @@ public class EnquiryController {
 	@Autowired
 	EnquiryServiceI enquiryServiceI;
 
+	//  http://localhost:9090/GCappps/enquiry
 	@PostMapping("/enquiry")
 	public ResponseEntity<BaseResponce<EnquiryDetails>> customerEnquiry(@RequestBody EnquiryDetails enquiryDetails) {
-
+		System.out.println(enquiryDetails);
 		EnquiryDetails enquiryDetails2 = enquiryServiceI.customerEnquiry(enquiryDetails);
 		BaseResponce<EnquiryDetails> base = new BaseResponce<EnquiryDetails>(200, "Data Save Succefully",
 				enquiryDetails2);
 		return new ResponseEntity<BaseResponce<EnquiryDetails>>(base, HttpStatus.CREATED);
 	}
-
+//  http://localhost:9090/GCappps/getbyid/enquiryId
 	@GetMapping("/getbyid/{enquiryId}")
 	public ResponseEntity<BaseResponce<EnquiryDetails>> customerLogin(@PathVariable String enquiryId) {
 
@@ -46,7 +47,7 @@ public class EnquiryController {
 
 		return new ResponseEntity<BaseResponce<EnquiryDetails>>(base, HttpStatus.OK);
 	}
-
+//  http://localhost:9090/GCappps/getallenquiries/enquiryStatus
 	@GetMapping("/getallenquiries/{enquiryStatus}")
 	public ResponseEntity<BaseResponce<List<EnquiryDetails>>> customerEnquiries(@PathVariable String enquiryStatus) {
 
@@ -55,7 +56,8 @@ public class EnquiryController {
 				"All Enquired Customer Fetch Succefully", list);
 		return new ResponseEntity<BaseResponce<List<EnquiryDetails>>>(base, HttpStatus.OK);
 	}
-
+	
+	//http://localhost:9090/GCappps/cibilscore/enquiryId
 	@PutMapping("/cibilscore/{enquieryId}")
 	public ResponseEntity<BaseResponce<EnquiryDetails>> cibilScoreCheck(@PathVariable String enquieryId,
 			@RequestBody EnquiryDetails enquiryDetails) {

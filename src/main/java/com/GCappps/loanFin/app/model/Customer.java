@@ -23,16 +23,11 @@ import lombok.NoArgsConstructor;
 public class Customer {
 	@Id
 	private String customerId;
-
 	private String customerFirstName;
-
 	private String cutomerMiddleName;
-
 	private String customerLastName;
 	private String customerDataOfBirth;
-
 	private String customerEmail;
-
 	private Double cutomerMobileNumber;
 	private Double cutomerAdditionalMobileNumber;
 	private String customerGender;
