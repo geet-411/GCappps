@@ -70,14 +70,14 @@ public class MailServiceImpl implements MailServiceI{
 		message.setSubject("Regarding GCappps loan enquiry");
 		Integer cibil=enquiryDetails.getCibilScore();
 		if(cibil>700) {
-			message.setText("Respected Customer,we GCappps family happy to announce that after primary verification of CIBIL Data"+cibil+" you are eligible to get loan from our FinTech.Get in association RE for further process.");
+			message.setText("Respected Customer,we GCappps family happy to announce that after primary verification of CIBIL Data we found your cibil score " +cibil+" is satisfied,therefore you are eligible to get loan from our FinTech.Get in association RE for further process.");
 		}
 		else {
-			message.setText("Respected Customer,we GCappps family regret to inform you based on your primary verification of CIBIL Data you are not eligible to get loan from our FinTech.Hope you will remain associate with GCappps.");
+			message.setText("Respected Customer,we GCappps family regret to inform you based on your primary verification of CIBIL Data we found your cibil score " +cibil+" is unsatisfied,therefore you are not eligible to get loan from our FinTech.Hope you will remain associate with GCappps.");
 		}
 		message.setText(message.getText());
 		mailsender.send(message);
-		
+	 
 	}
 	 
 	 

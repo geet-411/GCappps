@@ -1,9 +1,13 @@
 package com.GCappps.loanFin.app.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,18 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Component
 public class LoanDisbursement {
 	@Id
 	private String loanId;
-	private String amountPayType;
 	private Double totalAmount;
-	private String bankName;
 	private String dealarAccountNumber;
 	private String dealerIFSCCode;
-	private String dealerAccountType;
-	private String paymentStatus;
-	private Double transferAmount;
-	private String amountPaidDate;
+	private Date amountPaidDate;
 	
 
 }
