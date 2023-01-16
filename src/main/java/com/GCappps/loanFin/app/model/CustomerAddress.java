@@ -17,14 +17,22 @@ import lombok.NoArgsConstructor;
 @Entity
 public class CustomerAddress {
 	@Id
-	private String customerAddress;
-	
-	
-	//Secondary referance
-	@OneToOne(cascade = CascadeType.ALL)
-	private PermanentAddress permanentAddress;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	private LocalAddress localAddress;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer addressId;
+	private Integer localHouseNumber;
+	private String localAreaName;
+	private String localStreetName;
+	private String localCityName;
+	private String localDistrict;
+	private Long localPincode;
+	private String localState;
+
+	private Integer permanentHouseNumber;
+	private String permanentAreaName;
+	private String permanentStreetName;
+	private String permanentCityName;
+	private String permanentDistrict;
+	private Long permanentPincode;
+	private String permanentState;
 
 }

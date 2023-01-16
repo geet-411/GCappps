@@ -23,16 +23,14 @@ public class Dealer {
 	private String dealerId;
 	private String dealerName;
 	private String dealerLocation;
-	private String dealerLicenceId;
+	private String dealerEmail;
+	private String accountNumber;
+	private String accountIFSCCode;
+	private String vehicleCompanyName;
+	private String vehicleModel;
+	private double vehiclePrice;
 	
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private DealerAccountDetails dealerAccountDetails;
-	
-	
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Vehicle> vehicleData;
-
-	
+		
 
 }

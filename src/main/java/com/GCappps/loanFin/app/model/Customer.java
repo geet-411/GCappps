@@ -28,19 +28,20 @@ public class Customer {
 	private String customerLastName;
 	private String customerDataOfBirth;
 	private String customerEmail;
-	private Double cutomerMobileNumber;
-	private Double cutomerAdditionalMobileNumber;
+	private Long cutomerMobileNumber;
+	private Long cutomerAdditionalMobileNumber;
 	private String customerGender;
 	private Double customerTotalLoanRequired;
 	private String customerVerificationStatus;
 
 	// Secondary referance
 
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	private CustomerAddress customerAddress;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private Profession customerProfession;
+	private CustomerFinancialData customerFinancialData;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Documents customerDocuments;
@@ -54,8 +55,8 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Dealer dealerData;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Vehicle vehicleData;
+//	@OneToOne(cascade = CascadeType.ALL)
+//	private Vehicle vehicleData;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private GuarantorDetails guarantorDetails;

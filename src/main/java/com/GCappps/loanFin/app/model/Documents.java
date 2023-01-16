@@ -16,13 +16,10 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Documents {
 	@Id
-	private String documentId;
-	@Lob
-	private byte[] addressProof;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer documentId;
 	@Lob
 	private byte[] pancard;
-	@Lob
-	private byte[] incometax;
 	@Lob
 	private byte[] adharcard;
 	@Lob
@@ -30,7 +27,9 @@ public class Documents {
 	@Lob
 	private byte[] signature;
 	@Lob
-	private byte[] bankCheque;
+	private byte[] incomeStatement;
+
+	
 	
 	
 

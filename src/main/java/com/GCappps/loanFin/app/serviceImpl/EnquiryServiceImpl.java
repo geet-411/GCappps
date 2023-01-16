@@ -3,11 +3,14 @@ package com.GCappps.loanFin.app.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.GCappps.loanFin.app.enums.EnquiryStatus;
+import com.GCappps.loanFin.app.model.Cibil;
 import com.GCappps.loanFin.app.model.EnquiryDetails;
 import com.GCappps.loanFin.app.repository.EnquiryRepository;
 import com.GCappps.loanFin.app.serviceI.EnquiryServiceI;
@@ -17,13 +20,13 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 
 	@Autowired
 	EnquiryRepository enquiryRepository;
-	Random r = new Random(999);
 
 	public EnquiryDetails customerEnquiry(EnquiryDetails enquiryDetails) {
+		//Random EnquiryId between 100 to 200
 
-		enquiryDetails.setEnquiryId("GCappps-Enq-" + r.nextInt(9999));//
-		enquiryDetails.setEnquiryStatus("enquiry");
-		EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);
+		enquiryDetails.setEnquiryId("GCappps-Enq-" +ThreadLocalRandom.current().nextInt(100, 200));
+		enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.Enquired));
+	EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);
 		return enquiryDetails2;
 	}
 
@@ -45,7 +48,12 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 	}
 
 	public EnquiryDetails updateEnquiry(EnquiryDetails enquiryDetails) {
-		enquiryDetails.setEnquiryStatus("Enquired");
+		
+//		if(enquiryDetails.getCibilScore()>=750) {
+//			
+//		}
+		enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CibilOK));
+
 		EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);
 		return enquiryDetails2;
 	}
