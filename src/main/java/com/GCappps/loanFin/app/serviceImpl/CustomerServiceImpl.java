@@ -15,17 +15,20 @@ public class CustomerServiceImpl implements CustomerServiceI {
 	@Autowired
 	CustomerRepository customerRepository;
 	
-	public Customer saveCustomer(Customer customer) {
-		
-		return customerRepository.save(customer) ;
-	}
-
+	
 	@Override
 	public List<Customer> getCustomer(String customerVerificationStatus) {
 		
 		
 		
 		return customerRepository.findAllByCustomerVerificationStatus(customerVerificationStatus);
+	}
+
+
+	@Override
+	public Customer saveCustomer(Customer customer) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
