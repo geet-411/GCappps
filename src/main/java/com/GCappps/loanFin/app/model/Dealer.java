@@ -28,9 +28,7 @@ public class Dealer {
 	private String accountIFSCCode;
 	private String vehicleCompanyName;
 	private String vehicleModel;
-	private double vehiclePrice;
+	private Double vehiclePrice;
 	
-	
-		
 
 }

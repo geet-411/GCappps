@@ -21,6 +21,4 @@ public class Cibil {
 	private Date cibilGeneratedDate;
 	private String remark;
 	private Integer previousEmi;
-	
-
 }

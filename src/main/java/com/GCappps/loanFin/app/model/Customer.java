@@ -26,7 +26,7 @@ public class Customer {
 	private String customerFirstName;
 	private String cutomerMiddleName;
 	private String customerLastName;
-	private String customerDataOfBirth;
+	private String customerDateOfBirth;
 	private String customerEmail;
 	private Long cutomerMobileNumber;
 	private Long cutomerAdditionalMobileNumber;
@@ -55,8 +55,6 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Dealer dealerData;
 
-//	@OneToOne(cascade = CascadeType.ALL)
-//	private Vehicle vehicleData;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private GuarantorDetails guarantorDetails;

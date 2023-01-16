@@ -14,26 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Documents {
+public class SelfEmployeedProfession {
 	@Id
-
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer documentId;
-	
+	private String selfEmployeedProfessionId;
 	@Lob
-	private byte[] pancard;
-	@Lob
-	private byte[] adharcard;
-	@Lob
-	private byte[] photo;
-	@Lob
-	private byte[] signature;
-	@Lob
-	private byte[] incomeStatement;
-
-	
-
-	
+	private byte[] itrDocument;
 	
 
 }
