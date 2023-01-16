@@ -1,5 +1,7 @@
 package com.GCappps.loanFin.app.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -15,8 +17,10 @@ public class Cibil {
 
 	@Id
 	private String cibilId;
-	private String cibilScore;
-	private String cibilGeneratedDate;
+	private Integer cibilScore;
+	private Date cibilGeneratedDate;
 	private String remark;
-	private String previousEmi;
+	private Integer previousEmi;
+	
+
 }
