@@ -9,11 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.GCappps.loanFin.app.model.Customer;
 
 @Repository
-<<<<<<< Updated upstream
 public interface CustomerRepository extends JpaRepository<Customer,String> {
-=======
-public interface CustomerRepository extends JpaRepository<Customer, String> {
->>>>>>> Stashed changes
+
 
 public	List<Customer> findAllByCustomerVerificationStatus(String customerVerificationStatus);
 
