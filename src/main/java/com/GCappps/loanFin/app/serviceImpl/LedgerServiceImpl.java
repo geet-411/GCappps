@@ -161,8 +161,9 @@ public class LedgerServiceImpl implements LedgerServiceI{
 			installmentlist.add(l);
 			ledger.setInstallments(installmentlist);
 		}
-		
+		System.out.println();
+
 		return ledRepo.save(ledger);
-	}
+			}
 
 }
