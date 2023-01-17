@@ -1,6 +1,8 @@
 package com.GCappps.loanFin.app.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import java.time.Month;
@@ -15,10 +17,11 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Installment {
 	@Id
-	private String installmentId;
-	private Integer installmentnumber;
-	private String installmentmonth;
-	private Date installementpaiddate;
+	@GeneratedValue(strategy =GenerationType.AUTO)
+	private Integer installmentId;
+	private Integer installmentNumber;
+	private String installmentMonth;
+	private Date installementPaidDate;
 	private String paymentStatus;
 	
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.GCappps.loanFin.app.model.Customer;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer	, String> {
+public interface CustomerRepository extends JpaRepository<Customer,String> {
 
 	List<Customer> findAllByCustomerVerificationStatus(String customerVerificationStatus);
 

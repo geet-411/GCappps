@@ -22,7 +22,7 @@ public class LoanDisbursement {
 	@Id
 	private String loanId;
 	private Double totalAmount;
-	private String dealarAccountNumber;
+	private Long dealarAccountNumber;
 	private String dealerIFSCCode;
 	private Date amountPaidDate;
 	

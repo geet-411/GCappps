@@ -33,7 +33,7 @@ public class LedgerServiceImpl implements LedgerServiceI{
 
 	@Override
 	public Ledger ledgergeneration(Customer customer) {
-		ledger.setLedgerId("CGapps-Ledger-"+ThreadLocalRandom.current().nextInt(999,9999));
+		ledger.setLedgerId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
 		Calendar date = new GregorianCalendar();
 		int year = date.get(Calendar.YEAR);  
 		int month = date.get(Calendar.MONTH);   
@@ -48,50 +48,55 @@ public class LedgerServiceImpl implements LedgerServiceI{
 		int lastmonth=customer.getSanctionLetter().getLoanTenure();
 		
 		List<Installment> l=new ArrayList<>();
-	
+		String lastdate=null;
 		for(int i=1;i<=lastmonth;i++) {
 			Installment install=new Installment();
 			int x=(i+(month+1));
 			if(x<=12) {
-				install.setInstallmentId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
-				install.setInstallmentnumber(x-1);
+				 
+				install.setInstallmentNumber(x-1);
 				Month monthofinstallment= Month.of(x);
-				install.setInstallmentmonth(monthofinstallment+","+year);
+				install.setInstallmentMonth(monthofinstallment+","+year);
+				lastdate=monthofinstallment+","+year;
 			}
 			else if(x>12 && x<24) {
 				int m=(x)%12;
-				install.setInstallmentId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
-				install.setInstallmentnumber(x-1);
+				 
+				install.setInstallmentNumber(x-1);
 				Month monthofinstallment= Month.of(m);
-				install.setInstallmentmonth(monthofinstallment+","+(year+1));
+				install.setInstallmentMonth(monthofinstallment+","+(year+1));
+				lastdate=monthofinstallment+","+(year+1);
 				
 			}
 			else if(x==24) {
-				install.setInstallmentId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
-				install.setInstallmentnumber(x-1);
+				 
+				install.setInstallmentNumber(x-1);
 				Month monthofinstallment= Month.of(12);
-				install.setInstallmentmonth(monthofinstallment+","+(year+1));
+				install.setInstallmentMonth(monthofinstallment+","+(year+1));
+				lastdate=monthofinstallment+","+(year+2);
 			}
 			else if((x)>24 && (x)<36) {
 				int m=(x)%12;
-				install.setInstallmentId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
-				install.setInstallmentnumber(x-1);
+				 
+				install.setInstallmentNumber(x-1);
 				Month monthofinstallment= Month.of(m);
-				install.setInstallmentmonth(monthofinstallment+","+(year+2));
+				install.setInstallmentMonth(monthofinstallment+","+(year+2));
+				lastdate=monthofinstallment+","+(year+2);
 				
 			}
 			else if(x==36) {
-				install.setInstallmentId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
-				install.setInstallmentnumber(x-1);
+				 
+				install.setInstallmentNumber(x-1);
 				Month monthofinstallment= Month.of(12);
-				install.setInstallmentmonth(monthofinstallment+","+(year+2));
+				install.setInstallmentMonth(monthofinstallment+","+(year+2));
+				lastdate=monthofinstallment+","+(year+2);
 			}
 			else if((x)>36 && (x)<48) {
 				int m=(x)%12;
-				install.setInstallmentId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
-				install.setInstallmentnumber(x-1);
+				install.setInstallmentNumber(x-1);
 				Month monthofinstallment= Month.of(m);
-				install.setInstallmentmonth(monthofinstallment+","+(year+3));
+				install.setInstallmentMonth(monthofinstallment+","+(year+3));
+				lastdate=monthofinstallment+","+(year+3);
 				
 			}
 			
@@ -100,27 +105,63 @@ public class LedgerServiceImpl implements LedgerServiceI{
 			
 		}
 		ledger.setInstallments(l);
+		ledger.setLoanEndDate(lastdate);
+		ledger.setLoanStatus("Regular");
 		customer.setLedger(ledger);
 		cust.save(customer);
-		
 		return ledRepo.save(ledger);
 	}
 
 	@Override
-	public Ledger payinstallment(Ledger ledger, Integer payinstallment) {
-		Double installment=ledger.getMonthlyEMI();
+	public Ledger payinstallment(Ledger ledger, Integer installmentnumber) {
+		Double emi=ledger.getMonthlyEMI();
 		List<Installment> list=ledger.getInstallments();
-		int count=1;
+		List<Installment> installmentlist=new ArrayList<>();
+		int count=0;
 		for(Installment l:list) {
+			if(l.getInstallmentNumber()==installmentnumber) {
+				l.setPaymentStatus("Paid");
+				Date date=new Date();
+				l.setInstallementPaidDate(date);
+			}
+			installmentlist.add(l);
+			ledger.setInstallments(installmentlist);
+		}
+		
+		for(Installment l:installmentlist)	{
+		try {
 			if(l.getPaymentStatus().equals("Paid")) {
 				count++;
+			}}
+			catch(NullPointerException e)
+			{
+				e.printStackTrace();
 			}
 			
-		}
-		Double paidinstallment=(installment*count);
+		}	
+		Double paidinstallment=(emi*count);
 		ledger.setAmountPaidTillDate(paidinstallment);
 		Double remainamount=ledger.getTotalLoanAmount()-paidinstallment;
 		ledger.setRemainingAmount(remainamount);
+		return ledRepo.save(ledger);
+	}
+
+	@Override
+	public Ledger unpayinstallment(Ledger ledger, Integer installmentnumber) {
+		Double emi=ledger.getMonthlyEMI();
+		List<Installment> list=ledger.getInstallments();
+		List<Installment> installmentlist=new ArrayList<>();
+//		int count=0;
+		for(Installment l:list) {
+			if(l.getInstallmentNumber()==installmentnumber) {
+				l.setPaymentStatus("UnPaid");
+				Date date=new Date();
+				l.setInstallementPaidDate(date);
+			}
+			installmentlist.add(l);
+			ledger.setInstallments(installmentlist);
+		}
+		
 		return ledRepo.save(ledger);
 	}
 

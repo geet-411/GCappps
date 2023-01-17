@@ -50,9 +50,6 @@ public class Customer {
 	private Cibil customerCibilScore;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private CustomerAccountDetails customerAccountDetails;
-
-	@OneToOne(cascade = CascadeType.ALL)
 	private Dealer dealerData;
 
 

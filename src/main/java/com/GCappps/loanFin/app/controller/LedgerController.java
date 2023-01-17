@@ -33,9 +33,17 @@ public class LedgerController {
 	}
 	
 	@PutMapping("/payinstallment/{installmentnumber}")
-	public ResponseEntity<BaseResponce<Ledger>> payinstallment(@RequestBody Ledger ledger,@PathVariable Integer payinstallment){
-		Ledger led=ledservice.payinstallment(ledger,payinstallment);
-		return null;
+	public ResponseEntity<BaseResponce<Ledger>> payinstallment(@RequestBody Ledger ledger,@PathVariable Integer installmentnumber){
+		Ledger led=ledservice.payinstallment(ledger,installmentnumber);
+		BaseResponce<Ledger> base=new BaseResponce<>(200,"Installment number "+installmentnumber +" is paid",led);
+		return new ResponseEntity<BaseResponce<Ledger>>(base,HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/unpayinstallment/{installmentnumber}")
+	public ResponseEntity<BaseResponce<Ledger>> unpayinstallment(@RequestBody Ledger ledger,@PathVariable Integer installmentnumber){
+		Ledger led=ledservice.unpayinstallment(ledger,installmentnumber);
+		BaseResponce<Ledger> base=new BaseResponce<>(200,"Installment number "+installmentnumber +" is Unpaid",led);
+		return new ResponseEntity<BaseResponce<Ledger>>(base,HttpStatus.CREATED);
 	}
 
 }

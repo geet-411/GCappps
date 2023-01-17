@@ -22,7 +22,7 @@ public class EnquiryDetails {
 	private String customerLastName;
 	private String customerDateOfBirth;
 	private String customerEmail;
-	private String customerMobileNumber;
+	private Long customerMobileNumber;
 	private String pancardNumber;
 	private String enquiryStatus;
 	private Integer cibilScore;

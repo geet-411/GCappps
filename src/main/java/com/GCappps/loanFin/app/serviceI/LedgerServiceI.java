@@ -9,4 +9,6 @@ public interface LedgerServiceI {
 
 	public Ledger payinstallment(Ledger ledger, Integer payinstallment);
 
+	public Ledger unpayinstallment(Ledger ledger, Integer installmentnumber);
+
 }

@@ -24,7 +24,7 @@ public class Dealer {
 	private String dealerName;
 	private String dealerLocation;
 	private String dealerEmail;
-	private String accountNumber;
+	private Long accountNumber;
 	private String accountIFSCCode;
 	private String vehicleCompanyName;
 	private String vehicleModel;

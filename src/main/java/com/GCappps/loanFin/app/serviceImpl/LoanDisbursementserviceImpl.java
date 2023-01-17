@@ -16,11 +16,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.GCappps.loanFin.app.LoanDisbursementserviceI;
+ 
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.LoanDisbursement;
 import com.GCappps.loanFin.app.repository.CustomerRepository;
 import com.GCappps.loanFin.app.repository.LoanDisbursementsRepository;
+import com.GCappps.loanFin.app.serviceI.LoanDisbursementserviceI;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -48,7 +49,7 @@ public class LoanDisbursementserviceImpl implements LoanDisbursementserviceI {
 	public LoanDisbursement loandisbursement(Customer customer) {
 		loan.setLoanId("GCapps-LoanId-"+ThreadLocalRandom.current().nextInt(999,9999));
 		loan.setTotalAmount(customer.getSanctionLetter().getLoanAmountSanctioned());
-		loan.setDealarAccountNumber(customer.getDealerData().getAccountNumber());
+		loan.setDealarAccountNumber((customer.getDealerData().getAccountNumber()));
 		loan.setDealerIFSCCode(customer.getDealerData().getAccountIFSCCode());
 		Date date=new Date();
 		loan.setAmountPaidDate(date);

@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.GCappps.loanFin.app.LoanDisbursementserviceI;
+ 
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.LoanDisbursement;
 import com.GCappps.loanFin.app.responce.BaseResponce;
+import com.GCappps.loanFin.app.serviceI.LoanDisbursementserviceI;
 
 @RestController
 @CrossOrigin("*")
