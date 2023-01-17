@@ -29,8 +29,8 @@ public class Customer {
 	private String customerLastName;
 	private String customerDateOfBirth;
 	private String customerEmail;
-	private Long cutomerMobileNumber;
-	private Long cutomerAdditionalMobileNumber;
+	private Long customerMobileNumber;
+	private Long customerAdditionalMobileNumber;
 	private String customerGender;
 //	private Double customerTotalLoanRequired;
 	private String customerVerificationStatus;

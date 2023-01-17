@@ -21,8 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.GCappps.loanFin.app.enums.CustomerEnum;
 import com.GCappps.loanFin.app.enums.EnquiryStatus;
+import com.GCappps.loanFin.app.model.Cibil;
 import com.GCappps.loanFin.app.model.Customer;
+import com.GCappps.loanFin.app.model.Dealer;
 import com.GCappps.loanFin.app.model.Documents;
+import com.GCappps.loanFin.app.model.Ledger;
 import com.GCappps.loanFin.app.responce.BaseResponce;
 import com.GCappps.loanFin.app.serviceI.CustomerServiceI;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,15 +49,27 @@ public class CustomerController {
 		ObjectMapper om = new ObjectMapper();
 		try {
 			Customer customerRead = om.readValue(customerData, Customer.class);
-
+			
 			Customer customer = new Customer();
 			// int boundedRandomValue = ThreadLocalRandom.current().nextInt(0, 100);
 			// Random CustomerId between 100 to 200
 
 			customerRead.setCustomerId("cust-" + ThreadLocalRandom.current().nextInt(100, 200));
-
+			// from database
+			customerRead.getCustomerCibilScore().setCibilId("cibil-"+ThreadLocalRandom.current().nextInt(100, 200)); 
+			customerRead.getDealerData().setDealerId("Dealer-"+ThreadLocalRandom.current().nextInt(100, 200));
+			customerRead.getLedger().setLedgerId("Ledger-"+ThreadLocalRandom.current().nextInt(100, 200));
+			//All temporary null;
+			customerRead.setLoanDisbursement(null);
+			customerRead.setSanctionLetter(null);
+			customerRead.setLedger(null);
+			
+			
+			
+			
+			
 			customerRead.setCustomerVerificationStatus(String.valueOf(CustomerEnum.Applied));
-
+			
 			customer.setCustomerId(customerRead.getCustomerId());
 
 			Documents d1 = new Documents();
