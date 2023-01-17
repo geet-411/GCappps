@@ -50,10 +50,7 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cibil customerCibilScore;
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 	@OneToOne(cascade = CascadeType.ALL)
 	private Dealer dealerData;
 

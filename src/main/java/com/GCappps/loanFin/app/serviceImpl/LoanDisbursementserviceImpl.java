@@ -13,12 +13,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-<<<<<<< Updated upstream
 
- 
-=======
-import com.GCappps.loanFin.app.serviceI.LoanDisbursementserviceI;
->>>>>>> Stashed changes
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.LoanDisbursement;
 import com.GCappps.loanFin.app.repository.CustomerRepository;
