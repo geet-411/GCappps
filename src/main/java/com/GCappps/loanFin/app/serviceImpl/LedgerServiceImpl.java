@@ -151,7 +151,7 @@ public class LedgerServiceImpl implements LedgerServiceI{
 		Double emi=ledger.getMonthlyEMI();
 		List<Installment> list=ledger.getInstallments();
 		List<Installment> installmentlist=new ArrayList<>();
-//		int count=0;
+		int count=0;
 		for(Installment l:list) {
 			if(l.getInstallmentNumber()==installmentnumber) {
 				l.setPaymentStatus("UnPaid");
@@ -161,9 +161,19 @@ public class LedgerServiceImpl implements LedgerServiceI{
 			installmentlist.add(l);
 			ledger.setInstallments(installmentlist);
 		}
-		
-
+		for(Installment l:installmentlist)	{
+			try {
+				if(l.getPaymentStatus().equals("UnPaid")) {
+					count++;
+				}}
+				catch(NullPointerException e)
+				{
+					e.printStackTrace();
+				}
+				
+			}	
+		ledger.setDefaulterCount(count);
 		return ledRepo.save(ledger);
-			}
+	}
 
 }

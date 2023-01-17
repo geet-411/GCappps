@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.CustomerAddress;
@@ -35,8 +37,18 @@ public class GCapppsApplication {
 //		System.out.println(startingmonth);
 //		System.out.println(date); 
 //		}
-		
+			
 	}
+		
 		}
-
+	@Bean
+	public RestTemplate rt(){
+		
+		RestTemplate re=new RestTemplate();
+		
+		return re;
+	}
 }
+	
+	
+

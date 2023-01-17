@@ -58,4 +58,16 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 		return enquiryDetails2;
 	}
 
+	@Override
+	public void saveCibilData(EnquiryDetails enqDetails) {
+		// TODO Auto-generated method stub
+		enquiryRepository.save(enqDetails);
+	}
+
+	@Override
+	public Optional<EnquiryDetails> getEnquiryByPan(String pancardNumber) {
+		// TODO Auto-generated method stub
+		return enquiryRepository.findByPancardNumber(pancardNumber);
+	}
+
 }

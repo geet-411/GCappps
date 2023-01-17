@@ -25,7 +25,7 @@ public class Customer {
 	private String customerId;
 	private String enquiryId;
 	private String customerFirstName;
-	private String cutomerMiddleName;
+	private String customerMiddleName;
 	private String customerLastName;
 	private String customerDateOfBirth;
 	private String customerEmail;

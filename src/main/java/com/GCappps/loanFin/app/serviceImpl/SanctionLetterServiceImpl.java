@@ -49,7 +49,7 @@ public class SanctionLetterServiceImpl implements SanctionLetterService{
 		sanctionLetter.setSanctionId("GCapps-Sanction Letter-"+ThreadLocalRandom.current().nextInt(999,9999));
 		Date date=new Date();
 		sanctionLetter.setSanctionDate(date);
-		sanctionLetter.setApplicantName(customer.getCustomerFirstName()+" "+customer.getCutomerMiddleName()+" "+customer.getCustomerLastName());
+		sanctionLetter.setApplicantName(customer.getCustomerFirstName()+" "+customer.getCustomerMiddleName()+" "+customer.getCustomerLastName());
 		sanctionLetter.setSanctionLetterStatus("Approved");
 		SanctionLetter san= slr.save(sanctionLetter);
 		customer.setSanctionLetter(san);

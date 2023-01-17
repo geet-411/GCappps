@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.GCappps.loanFin.app.model.Cibil;
 import com.GCappps.loanFin.app.model.EnquiryDetails;
 import com.GCappps.loanFin.app.responce.BaseResponce;
 import com.GCappps.loanFin.app.serviceI.EnquiryServiceI;
@@ -27,6 +29,12 @@ public class EnquiryController {
 
 	@Autowired
 	EnquiryServiceI enquiryServiceI;
+	
+	@Autowired
+	RestTemplate rt;
+	
+	@Autowired 
+	EnquiryDetails enqDetails;
 
 	// http://localhost:9090/GCappps/enquiry
 	@PostMapping("/enquiry")
@@ -77,5 +85,21 @@ public class EnquiryController {
 
 		BaseResponce<EnquiryDetails> base1 = new BaseResponce<EnquiryDetails>(404, "Customer Not Found", null);
 		return new ResponseEntity<BaseResponce<EnquiryDetails>>(base1, HttpStatus.NOT_FOUND);
+	}
+	@GetMapping("/CIBILScore/check/{pancardNumber}")
+	public Cibil cibilUpdate(@PathVariable String pancardNumber){
+		String url="http://localhost:8080/GCappps/CIBILScore/check/"+pancardNumber;
+		Cibil cibil = rt.getForObject(url,Cibil.class);
+		System.out.println(cibil);
+		Optional<EnquiryDetails> enqu = enquiryServiceI.getEnquiryByPan(pancardNumber);
+		if(enqu.isPresent()) {
+			EnquiryDetails enq=enqu.get();
+			System.out.println(enq.getEnquiryId());
+				enq.setCibilData(cibil);
+				enq.setCibilScore(cibil.getCibilScore());
+				enquiryServiceI.saveCibilData(enq);
+		}
+		
+		return cibil;
 	}
 }

@@ -15,4 +15,6 @@ public interface EnquiryRepository extends JpaRepository<EnquiryDetails, String>
 
 	public Optional<EnquiryDetails> findById(String enquieryId);
 
+	public Optional<EnquiryDetails> findByPancardNumber(String pancardNumber);
+
 }
