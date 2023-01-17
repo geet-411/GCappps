@@ -54,11 +54,11 @@ public class CustomerController {
 			// int boundedRandomValue = ThreadLocalRandom.current().nextInt(0, 100);
 			// Random CustomerId between 100 to 200
 
-			customerRead.setCustomerId("cust-" + ThreadLocalRandom.current().nextInt(100, 200));
+			customerRead.setCustomerId("GCappps-cust-" + ThreadLocalRandom.current().nextInt(100, 200));
 			// from database
-			customerRead.getCustomerCibilScore().setCibilId("cibil-"+ThreadLocalRandom.current().nextInt(100, 200)); 
-			customerRead.getDealerData().setDealerId("Dealer-"+ThreadLocalRandom.current().nextInt(100, 200));
-			customerRead.getLedger().setLedgerId("Ledger-"+ThreadLocalRandom.current().nextInt(100, 200));
+			customerRead.getCustomerCibilScore().setCibilId("GCappps-cibil-"+ThreadLocalRandom.current().nextInt(100, 200)); 
+			customerRead.getDealerData().setDealerId("GCappps-Dealer-"+ThreadLocalRandom.current().nextInt(100, 200));
+			customerRead.getLedger().setLedgerId("GCappps-Ledger-"+ThreadLocalRandom.current().nextInt(100, 200));
 			//All temporary null;
 			customerRead.setLoanDisbursement(null);
 			customerRead.setSanctionLetter(null);
