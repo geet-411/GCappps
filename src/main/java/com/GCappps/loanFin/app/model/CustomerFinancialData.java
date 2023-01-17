@@ -19,7 +19,7 @@ public class CustomerFinancialData {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer customerFinancialId;
-	private String customerTotalLoanRequired;
+	private Double customerTotalLoanRequired;
 	private Long customerAccountNumber;
 	private String bankName;
 	private String accountHolderName;
@@ -27,6 +27,6 @@ public class CustomerFinancialData {
 	private String ocupationType;
 	private String designation;
 	private Double monthlyIncome;
-	private String EmployerName;
+	private String employerName;
 	
 }

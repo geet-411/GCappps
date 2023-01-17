@@ -24,14 +24,14 @@ public class LedgerController {
 	
 	@Autowired
 	LedgerServiceI ledservice;
-	
+	//http://localhost:9090/GCappps/generateledger
 	@PostMapping("/generateledger")
 	public ResponseEntity<BaseResponce<Ledger>> ledgergeneration(@RequestBody Customer customer){
 		Ledger ledger=ledservice.ledgergeneration(customer);
 		BaseResponce<Ledger> base=new BaseResponce<>(200,"Leder is generated",ledger);
 		return new ResponseEntity<BaseResponce<Ledger>>(base,HttpStatus.CREATED);
 	}
-	
+	//http://localhost:9090/GCappps/payinstallment/{installmentnumber}
 	@PutMapping("/payinstallment/{installmentnumber}")
 	public ResponseEntity<BaseResponce<Ledger>> payinstallment(@RequestBody Ledger ledger,@PathVariable Integer installmentnumber){
 		Ledger led=ledservice.payinstallment(ledger,installmentnumber);

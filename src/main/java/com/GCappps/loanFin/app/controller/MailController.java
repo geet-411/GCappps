@@ -31,7 +31,7 @@ public class MailController {
 	
 	@Value("${spring.mail.username}")
 	private String fromEmail;
-	
+	//http://localhost:9090/GCappps/sendmail
 	@PostMapping("/sendmail")
 	public String sendmail(@RequestBody SimpleMail mail)
 	{
@@ -47,7 +47,7 @@ public class MailController {
 		}
 		
 	}
-	
+	//http://localhost:9090/GCappps/sendattachmentmail
 	@PostMapping("/sendattachmentmail")
 	public String sendtp(@RequestPart(value="attachment") MultipartFile attachment,@RequestPart(value = "emailattach") String emailattach)
 	{
@@ -71,7 +71,7 @@ public class MailController {
 		}
 	}
 	
-		
+	//http://localhost:9090/GCappps/cibilstatus	
 	@PostMapping("/cibilstatus")
 	public String sendcibilstatus(@RequestBody EnquiryDetails enquiryDetails)
 	{

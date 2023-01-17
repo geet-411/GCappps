@@ -30,10 +30,4 @@ public class Documents {
 	private byte[] signature;
 	@Lob
 	private byte[] incomeStatement;
-
-	
-
-	
-	
-
 }

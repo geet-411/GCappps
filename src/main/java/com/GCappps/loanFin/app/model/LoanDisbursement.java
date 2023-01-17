@@ -25,6 +25,4 @@ public class LoanDisbursement {
 	private Long dealarAccountNumber;
 	private String dealerIFSCCode;
 	private Date amountPaidDate;
-	
-
 }

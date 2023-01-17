@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
- 
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.LoanDisbursement;
 import com.GCappps.loanFin.app.responce.BaseResponce;
@@ -22,7 +21,7 @@ public class LoanDisbursementController {
 	
 	@Autowired
 	LoanDisbursementserviceI loandisb;
-	
+	//http://localhost:9090/GCappps/loandisburse
 	@PostMapping("/loandisburse")
 	public ResponseEntity<BaseResponce<LoanDisbursement>> loandisbursement(@RequestBody Customer customer){
 		LoanDisbursement loandisuDisbursement=loandisb.loandisbursement(customer);

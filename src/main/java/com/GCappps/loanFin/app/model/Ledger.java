@@ -35,7 +35,4 @@ public class Ledger {
 	private String loanStatus;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Installment> installments; 
-
-	
-
 }

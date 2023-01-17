@@ -17,8 +17,12 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Installment {
 	@Id
+<<<<<<< Updated upstream
 	@GeneratedValue(strategy =GenerationType.AUTO)
 	private Integer installmentId;
+=======
+	private String installmentId;
+>>>>>>> Stashed changes
 	private Integer installmentNumber;
 	private String installmentMonth;
 	private Date installementPaidDate;

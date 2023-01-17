@@ -24,7 +24,7 @@ public class SanctionLetterController {
 	
 	@Autowired
 	SanctionLetterService sanLetter;
-	
+	//http://localhost:9090/GCappps/generatesanctionletter/{customerId}
 	@PostMapping("/generatesanctionletter/{customerId}")
 	public ResponseEntity<BaseResponce<SanctionLetter>> generatesanction(@RequestBody SanctionLetter sanctionLetter,@PathVariable String customerId){
 		SanctionLetter san=sanLetter.generatesanction(sanctionLetter,customerId);

@@ -8,7 +8,10 @@ import java.util.GregorianCalendar;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
+import com.GCappps.loanFin.app.model.Customer;
+import com.GCappps.loanFin.app.model.CustomerAddress;
+import com.GCappps.loanFin.app.model.CustomerFinancialData;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
@@ -21,12 +24,12 @@ public class GCapppsApplication {
 	
 		
 
-//		ObjectMapper om=new ObjectMapper();
-//		try {
-//			System.out.println(om.writeValueAsString(new Customer()));
-//		} catch (JsonProcessingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+		ObjectMapper om=new ObjectMapper();
+		try {
+			System.out.println(om.writeValueAsString(new CustomerFinancialData()));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 //		Date date=new Date();
 //		int startingmonth=date.getYear();
 //		System.out.println(startingmonth);
@@ -34,5 +37,6 @@ public class GCapppsApplication {
 //		}
 		
 	}
+		}
 
 }

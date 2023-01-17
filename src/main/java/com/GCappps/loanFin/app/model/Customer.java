@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 public class Customer {
 	@Id
 	private String customerId;
+	private String enquiryId;
 	private String customerFirstName;
 	private String cutomerMiddleName;
 	private String customerLastName;
@@ -31,7 +32,7 @@ public class Customer {
 	private Long cutomerMobileNumber;
 	private Long cutomerAdditionalMobileNumber;
 	private String customerGender;
-	private Double customerTotalLoanRequired;
+//	private Double customerTotalLoanRequired;
 	private String customerVerificationStatus;
 
 	// Secondary referance
@@ -49,6 +50,10 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cibil customerCibilScore;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 	@OneToOne(cascade = CascadeType.ALL)
 	private Dealer dealerData;
 
