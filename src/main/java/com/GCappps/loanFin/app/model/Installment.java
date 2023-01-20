@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.Month;
 import java.util.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,7 @@ public class Installment {
 	private Integer installmentId;
 	private Integer installmentNumber;
 	private String installmentMonth;
+	@CreationTimestamp
 	private Date installementPaidDate;
 	private String paymentStatus;
 	
