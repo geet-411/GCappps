@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.GCappps.loanFin.app.enums.CustomerEnum;
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.LoanDisbursement;
 import com.GCappps.loanFin.app.repository.CustomerRepository;
@@ -52,6 +53,7 @@ public class LoanDisbursementserviceImpl implements LoanDisbursementserviceI {
 		loan.setAmountPaidDate(date);
 
 		customer.setLoanDisbursement(loan);
+		customer.setCustomerVerificationStatus(String.valueOf(CustomerEnum.Loan_Disbursed));
 		custrepo.save(customer);
 
 		logger.info("Sanction Letter pdf started");
@@ -70,7 +72,8 @@ public class LoanDisbursementserviceImpl implements LoanDisbursementserviceI {
 		PdfWriter.getInstance(document, out);
 		document.open();
 
-		Font titlefont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 25);
+		Font titlefont = FontFactory.getFont(FontFactory.TIMES_BOLD,25);
+		titlefont.setColor(186, 2, 237);
 		Paragraph titlepara = new Paragraph(title, titlefont);
 		titlepara.setAlignment(Element.ALIGN_CENTER);
 		document.add(titlepara);

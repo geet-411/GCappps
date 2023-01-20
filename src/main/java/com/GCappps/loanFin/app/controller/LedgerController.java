@@ -1,5 +1,7 @@
 package com.GCappps.loanFin.app.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,15 @@ public class LedgerController {
 		Ledger led=ledservice.unpayinstallment(ledger,installmentnumber);
 		BaseResponce<Ledger> base=new BaseResponce<>(200,"Installment number "+installmentnumber +" is Unpaid",led);
 		return new ResponseEntity<BaseResponce<Ledger>>(base,HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/getledger")
+	public ResponseEntity<BaseResponce<Ledger>> getLedger(@RequestBody Customer customer)
+	{
+		Optional<Ledger> led=ledservice.getLedger(customer);
+		Ledger ledger=led.get();
+		BaseResponce<Ledger> base=new BaseResponce<>(201,"Required ledger is present",ledger);
+		return new  ResponseEntity<BaseResponce<Ledger>>(base,HttpStatus.OK);
 	}
 
 }

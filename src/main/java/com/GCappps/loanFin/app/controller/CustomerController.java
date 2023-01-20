@@ -25,9 +25,11 @@ import com.GCappps.loanFin.app.model.Cibil;
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.Dealer;
 import com.GCappps.loanFin.app.model.Documents;
+import com.GCappps.loanFin.app.model.EnquiryDetails;
 import com.GCappps.loanFin.app.model.Ledger;
 import com.GCappps.loanFin.app.responce.BaseResponce;
 import com.GCappps.loanFin.app.serviceI.CustomerServiceI;
+import com.GCappps.loanFin.app.serviceI.EnquiryServiceI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -36,60 +38,75 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CustomerController {
 
 	@Autowired
+	EnquiryServiceI enquiryServiceI;
+
+	@Autowired
 	CustomerServiceI customerServiceI;
 
 	// http://localhost:9090/GCappps/upload
-	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/upload/{enquiryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<BaseResponce<Customer>> saveCustomer(@RequestPart(value = "pancard") MultipartFile pancard,
 			@RequestPart(value = "adharcard") MultipartFile adharcard,
 			@RequestPart(value = "photo") MultipartFile photo,
 			@RequestPart(value = "signature") MultipartFile signature,
 			@RequestPart(value = "incomeStatement") MultipartFile incomeStatement,
-			@RequestPart(value = "customerData") String customerData) {
+			@RequestPart(value = "customerData") String customerData, @PathVariable String enquiryId) {
 		ObjectMapper om = new ObjectMapper();
 		try {
 			Customer customerRead = om.readValue(customerData, Customer.class);
+			System.err.println(customerData);
+			Optional<EnquiryDetails> enquiry1 = enquiryServiceI.customerLogin(enquiryId);
 
-			Customer customer = new Customer();
-			// int boundedRandomValue = ThreadLocalRandom.current().nextInt(0, 100);
-			// Random CustomerId between 100 to 200
+			if (enquiry1.isEmpty()) {
 
+				BaseResponce<Customer> base = new BaseResponce<>(200, "You are not eligible Customer ",customerRead);
+				return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.OK);
+
+			}
+			EnquiryDetails enqu = enquiry1.get();
 			customerRead.setCustomerId("GCappps-cust-" + ThreadLocalRandom.current().nextInt(100, 200));
-			// from database
-			customerRead.getCustomerCibilScore()
-					.setCibilId("GCappps-cibil-" + ThreadLocalRandom.current().nextInt(100, 200));
 			customerRead.getDealerData().setDealerId("GCappps-Dealer-" + ThreadLocalRandom.current().nextInt(100, 200));
-			// customerRead.getLedger().setLedgerId("GCappps-Ledger-"+ThreadLocalRandom.current().nextInt(100,
-			// 200));
-			// All temporary null;
-			customerRead.setLoanDisbursement(null);
-			customerRead.setSanctionLetter(null);
-			customerRead.setLedger(null);
-			customerRead.setCustomerVerificationStatus(String.valueOf(CustomerEnum.Applied));
 
-			customer.setCustomerId(customerRead.getCustomerId());
+			if (customerRead.getEnquiryId().equals(enqu.getEnquiryId())
+					&& enqu.getEnquiryStatus().equals(String.valueOf(EnquiryStatus.Cibilok))) {
 
-			Documents d1 = new Documents();
+				customerRead.setCustomerCibilScore(enqu.getCibilData());
+				customerRead.setLoanDisbursement(null);
+				customerRead.setSanctionLetter(null);
+				customerRead.setLedger(null);
+				customerRead.setCustomerVerificationStatus(String.valueOf(CustomerEnum.Applied));
 
-			d1.setPancard(pancard.getBytes());
-			d1.setAdharcard(adharcard.getBytes());
-			d1.setPhoto(photo.getBytes());
-			d1.setSignature(signature.getBytes());
-			d1.setIncomeStatement(incomeStatement.getBytes());
-			// customer.setPancard(file2.getBytes());
-			customerRead.setCustomerDocuments(d1);
+				Documents d1 = new Documents();
 
-			Customer customer2 = customerServiceI.saveCustomer(customerRead);
-			BaseResponce<Customer> base = new BaseResponce<>(201, "Customer Save successfully", customer2);
-			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
+				d1.setPancard(pancard.getBytes());
+				d1.setAdharcard(adharcard.getBytes());
+				d1.setPhoto(photo.getBytes());
+				d1.setSignature(signature.getBytes());
+				d1.setIncomeStatement(incomeStatement.getBytes());
+				// customer.setPancard(file2.getBytes());
+				customerRead.setCustomerDocuments(d1);
 
+				Customer customer2 = customerServiceI.saveCustomer(customerRead);
+
+				BaseResponce<Customer> base = new BaseResponce<>(201, "Customer Save successfully", customer2);
+				return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
+
+			} else {
+				BaseResponce<Customer> base = new BaseResponce<>(406, "You are not eligible Customer ", customerRead);
+				return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_ACCEPTABLE);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<BaseResponce<Customer>>(HttpStatus.CONFLICT);
+			BaseResponce<Customer> base = new BaseResponce<>(406, "You are not eligible Customer ", null);
+			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_ACCEPTABLE);
 		}
 
-		// return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
+//		BaseResponce<Customer> base = new BaseResponce<>(406, "You are not eligible Customer ",null);
+//		return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_ACCEPTABLE);
+
 	}
+
+	// return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
 
 //http://localhost:9090/GCappps/getAllCustomer/{customerVerificationStatus}
 	@GetMapping("/getAllCustomer/{customerVerificationStatus}")
@@ -135,26 +152,27 @@ public class CustomerController {
 		}
 
 	}
-	// oe ,user ,ac dis 
-		@PutMapping("/withstatus/{customerId}")
-		public ResponseEntity<BaseResponce<Customer>> withstatusUpdate(@RequestBody String customerVerfivcationstatus,
-				@PathVariable String customerId) {
 
-			Optional<Customer> customer1 = customerServiceI.getOneCustomer(customerId);
-			if (customer1.isPresent()) {
-				Customer customer2 = customer1.get();
-				
-				customer2.setCustomerVerificationStatus(customerVerfivcationstatus);// 
-				
-				Customer customer3 = customerServiceI.withoutDoc(customer2);
-				System.out.println("newly updated status "+customer3.getCustomerVerificationStatus());
-				BaseResponce<Customer> base = new BaseResponce<>(201, "Customer Update successfully", customer3);
-				return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
+	// oe ,user ,ac dis
+	@PutMapping("/withstatus/{customerId}")
+	public ResponseEntity<BaseResponce<Customer>> withstatusUpdate(@RequestBody String customerVerfivcationstatus,
+			@PathVariable String customerId) {
 
-			}
-			BaseResponce<Customer> base = new BaseResponce<>(404, "Customer Not Updated", null);
-			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_FOUND);
+		Optional<Customer> customer1 = customerServiceI.getOneCustomer(customerId);
+		if (customer1.isPresent()) {
+			Customer customer2 = customer1.get();
+
+			customer2.setCustomerVerificationStatus(customerVerfivcationstatus);//
+
+			Customer customer3 = customerServiceI.withoutDoc(customer2);
+			System.out.println("newly updated status " + customer3.getCustomerVerificationStatus());
+			BaseResponce<Customer> base = new BaseResponce<>(201, "Customer Update successfully", customer3);
+			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
+
 		}
+		BaseResponce<Customer> base = new BaseResponce<>(404, "Customer Not Updated", null);
+		return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_FOUND);
+	}
 //	@PutMapping("/withoutdocupdate/{customerId}")
 //	public ResponseEntity<BaseResponce<Customer>> withoutDoc(@RequestBody Customer customer,
 //			@PathVariable String customerId) {

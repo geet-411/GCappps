@@ -6,21 +6,43 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import org.hibernate.annotations.CreationTimestamp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomBooleanEditor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.GCappps.loanFin.app.enums.CustomerEnum;
+import com.GCappps.loanFin.app.enums.InstallmentEnum;
+import com.GCappps.loanFin.app.enums.LedgerLoanStatusEnum;
 import com.GCappps.loanFin.app.model.Customer;
 import com.GCappps.loanFin.app.model.Installment;
 import com.GCappps.loanFin.app.model.Ledger;
 import com.GCappps.loanFin.app.repository.CustomerRepository;
 import com.GCappps.loanFin.app.repository.LedgerRepository;
 import com.GCappps.loanFin.app.serviceI.LedgerServiceI;
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.CMYKColor;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+ 
  
 @Service
 public class LedgerServiceImpl implements LedgerServiceI{
+	 
 	
 	@Autowired
 	LedgerRepository ledRepo;
@@ -30,10 +52,14 @@ public class LedgerServiceImpl implements LedgerServiceI{
 	
 	@Autowired
 	CustomerRepository cust;
+	
+	@Autowired
+	JavaMailSender mailsender;
 
 	@Override
 	public Ledger ledgergeneration(Customer customer) {
-		ledger.setLedgerId("CGapps-Ledger-installment"+ThreadLocalRandom.current().nextInt(999,9999));
+		int installmentid=ThreadLocalRandom.current().nextInt(999,9999);
+		ledger.setLedgerId("CGappps_Ledger_installment-"+installmentid);
 		Calendar date = new GregorianCalendar();
 		int year = date.get(Calendar.YEAR);  
 		int month = date.get(Calendar.MONTH);   
@@ -57,6 +83,8 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				install.setInstallmentNumber(x-1);
 				Month monthofinstallment= Month.of(x);
 				install.setInstallmentMonth(monthofinstallment+","+year);
+				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
+				install.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
 				lastdate=monthofinstallment+","+year;
 			}
 			else if(x>12 && x<24) {
@@ -66,7 +94,8 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				Month monthofinstallment= Month.of(m);
 				install.setInstallmentMonth(monthofinstallment+","+(year+1));
 				lastdate=monthofinstallment+","+(year+1);
-				
+				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
+				install.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
 			}
 			else if(x==24) {
 				 
@@ -74,6 +103,7 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				Month monthofinstallment= Month.of(12);
 				install.setInstallmentMonth(monthofinstallment+","+(year+1));
 				lastdate=monthofinstallment+","+(year+2);
+				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
 			}
 			else if((x)>24 && (x)<36) {
 				int m=(x)%12;
@@ -82,7 +112,8 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				Month monthofinstallment= Month.of(m);
 				install.setInstallmentMonth(monthofinstallment+","+(year+2));
 				lastdate=monthofinstallment+","+(year+2);
-				
+				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
+				 
 			}
 			else if(x==36) {
 				 
@@ -90,6 +121,8 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				Month monthofinstallment= Month.of(12);
 				install.setInstallmentMonth(monthofinstallment+","+(year+2));
 				lastdate=monthofinstallment+","+(year+2);
+				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
+				 
 			}
 			else if((x)>36 && (x)<48) {
 				int m=(x)%12;
@@ -97,7 +130,7 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				Month monthofinstallment= Month.of(m);
 				install.setInstallmentMonth(monthofinstallment+","+(year+3));
 				lastdate=monthofinstallment+","+(year+3);
-				
+				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
 			}
 			
 			l.add(install);
@@ -106,32 +139,75 @@ public class LedgerServiceImpl implements LedgerServiceI{
 		}
 		ledger.setInstallments(l);
 		ledger.setLoanEndDate(lastdate);
-		ledger.setLoanStatus("Regular");
+		ledger.setLoanStatus(String.valueOf(LedgerLoanStatusEnum.Standard));
 		customer.setLedger(ledger);
-		cust.save(customer);
+		customer.setCustomerVerificationStatus(toString().valueOf(CustomerEnum.Ledger_Generated));
+		cust.save(customer);		
 		return ledRepo.save(ledger);
 	}
 
 	@Override
 	public Ledger payinstallment(Ledger ledger, Integer installmentnumber) {
+		Optional<Customer> custo=cust.findByLedger(ledger);
+		Customer customer=custo.get();
 		Double emi=ledger.getMonthlyEMI();
 		List<Installment> list=ledger.getInstallments();
 		List<Installment> installmentlist=new ArrayList<>();
 		int count=0;
 		for(Installment l:list) {
 			if(l.getInstallmentNumber()==installmentnumber) {
-				l.setPaymentStatus("Paid");
+				l.setPaymentStatus(String.valueOf(InstallmentEnum.Paid));
 				Date date=new Date();
 				l.setInstallementPaidDate(date);
+				SimpleMailMessage message=new SimpleMailMessage();
+				message.setFrom("pratap831@gmail.com");
+				message.setTo(customer.getCustomerEmail());
+				message.setSubject("Regarding GCappps Paid installment");
+				message.setText("Respected Customer,"+customer.getCustomerFirstName()+" "+customer.getCustomerLastName()+ "\n"+
+						"Your installment no "+l.getInstallmentNumber()+" is successfully paid.\n"
+						+"Ledger id="+ledger.getLedgerId()+"\n"
+						+"Detail information about transaction is:\n"
+						+"Installment ID="+l.getInstallmentId()+"\n"
+						+"Installment Number="+l.getInstallmentNumber()+"\n"
+						+"Month of Installment="+l.getInstallmentMonth()+"\n"
+						+"Date of payment="+l.getInstallementPaidDate()+"\n"
+						+"\n"
+						+"\n"
+						+ "Thanking You For Banking With Us, \n"
+						+ "GCappps FinTech.");
+				 
+				message.setText(message.getText());
+				mailsender.send(message);
 			}
 			installmentlist.add(l);
-			ledger.setInstallments(installmentlist);
+			ledger.setInstallments(list);
 		}
-		
+		int x=0;
 		for(Installment l:installmentlist)	{
 		try {
-			if(l.getPaymentStatus().equals("Paid")) {
+			if(l.getPaymentStatus().equals(String.valueOf(InstallmentEnum.UnPaid))) {
+				x++;
+			}
+			if(l.getPaymentStatus().equals(String.valueOf(InstallmentEnum.Paid))) {
 				count++;
+				if((count+x)==ledger.getTenure()) 
+				{
+					ledger.setLoanStatus(String.valueOf(LedgerLoanStatusEnum.Loan_Cleared));
+					System.err.println(ledger.getLoanStatus());
+					SimpleMailMessage message=new SimpleMailMessage();
+					message.setFrom("pratap831@gmail.com");
+					message.setTo(customer.getCustomerEmail());
+					message.setSubject("Regarding GCappps loan Clearance");
+					message.setText("Respected Customer,"+customer.getCustomerFirstName()+" "+customer.getCustomerLastName()+ "\n"+
+							"We GCappps happy to announce that after successful completion of your loan tenure your loan account is cleared."
+							+ "We except your further cooperation with GCappps FinTech. \n"
+							+"\n"
+							+"\n"
+							+ "Thanking You For Banking With Us, \n"
+							+ "GCappps FinTech.");
+					 
+					mailsender.send(message);
+				}
 			}}
 			catch(NullPointerException e)
 			{
@@ -145,35 +221,90 @@ public class LedgerServiceImpl implements LedgerServiceI{
 		ledger.setRemainingAmount(remainamount);
 		return ledRepo.save(ledger);
 	}
-
+	
+	
+	
 	@Override
 	public Ledger unpayinstallment(Ledger ledger, Integer installmentnumber) {
-		Double emi=ledger.getMonthlyEMI();
+		Optional<Customer> custo=cust.findByLedger(ledger);
+		Customer customer=custo.get();
+		int addInstallment=ledger.getTenure();
 		List<Installment> list=ledger.getInstallments();
-		List<Installment> installmentlist=new ArrayList<>();
+		Installment i=new Installment();
 		int count=0;
+		int x=0;
 		for(Installment l:list) {
 			if(l.getInstallmentNumber()==installmentnumber) {
-				l.setPaymentStatus("UnPaid");
-				Date date=new Date();
-				l.setInstallementPaidDate(date);
+				
+				l.setPaymentStatus(String.valueOf(InstallmentEnum.UnPaid));
+//				Date date=new Date();
+//				l.setInstallementPaidDate(date);
+				ledger.setTenure(addInstallment+1);
+				x++;
+				SimpleMailMessage message=new SimpleMailMessage();
+				message.setFrom("pratap831@gmail.com");
+				message.setTo(customer.getCustomerEmail());
+				message.setSubject("Regarding GCappps UnPaid installment");
+				message.setText("Respected Customer,"+customer.getCustomerFirstName()+" "+customer.getCustomerLastName()+ "\n"+
+						"Your installment no "+l.getInstallmentNumber()+" is Unpaid.Please pay installment as soon as possible to avoid further action.\n"
+						+"Ledger id="+ledger.getLedgerId()+"\n"
+						+"Detail information about transaction is:\n"
+						+"You missed installment Number ="+l.getInstallmentNumber()+"\n"
+						+"Your missed month of Installment is="+l.getInstallmentMonth()+"\n"
+						+"\n" 
+						+"\n"
+						+"\n"
+						+ "Thanking You For Banking With Us, \n"
+						+ "GCappps FinTech.");
+				mailsender.send(message);
+			
+				 
 			}
-			installmentlist.add(l);
-			ledger.setInstallments(installmentlist);
 		}
-		for(Installment l:installmentlist)	{
+		if(x==1) {
+			i.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
+			i.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
+			i.setInstallmentNumber(addInstallment+1);
+			i.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
+			list.add(list.size(),i );
+		}
+		int n=0;
+		for(Installment l:list)	{
 			try {
-				if(l.getPaymentStatus().equals("UnPaid")) {
+//				n=0;
+				if(l.getPaymentStatus().equals(String.valueOf(InstallmentEnum.UnPaid))) {
 					count++;
-				}}
+					n++;
+					 
+				}
+				else {
+					n=0;
+				}
+				if(n==3 && n<6) {
+					ledger.setLoanStatus(String.valueOf(LedgerLoanStatusEnum.Non_Performing_Asset));
+				}
+				if(n==6) {
+					System.err.println(n);
+					ledger.setLoanStatus(String.valueOf(LedgerLoanStatusEnum.Bad_Loan));
+				}
+				
+				
+			}
 				catch(NullPointerException e)
 				{
 					e.printStackTrace();
 				}
 				
-			}	
+			}
+		 
 		ledger.setDefaulterCount(count);
 		return ledRepo.save(ledger);
+	}
+
+	@Override
+	public Optional<Ledger> getLedger(Customer customer) {
+		// TODO Auto-generated method stub
+		return ledRepo.findById(customer.getLedger().getLedgerId());
 	}
 
 }
