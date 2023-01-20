@@ -2,6 +2,7 @@ package com.GCappps.loanFin.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,74 +25,63 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 @RequestMapping("/GCappps")
 public class MailController {
-	
+
 	@Autowired
 	MailServiceI mailService;
-	
-	
+
 	@Value("${spring.mail.username}")
 	private String fromEmail;
-	//http://localhost:9090/GCappps/sendmail
+
+	// http://localhost:9090/GCappps/sendmail
 	@PostMapping("/sendmail")
-	public String sendmail(@RequestBody SimpleMail mail)
-	{
+	public String sendmail(@RequestBody SimpleMail mail) {
 		try {
 			mailService.sendmail(mail);
 			return "Mail sent successfully!!!";
-			
-		}
-		catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			return "Problem in sending mail";
 		}
-		
+
 	}
-	//http://localhost:9090/GCappps/sendattachmentmail
+
+	// http://localhost:9090/GCappps/sendattachmentmail
 	@PostMapping("/sendattachmentmail")
-	public String sendtp(@RequestPart(value="attachment") MultipartFile attachment,@RequestPart(value = "emailattach") String emailattach)
-	{
-		ObjectMapper om=new ObjectMapper();
+	public String sendtp(@RequestPart(value = "attachment") MultipartFile attachment,
+			@RequestPart(value = "emailattach") String emailattach) {
+		ObjectMapper om = new ObjectMapper();
 		try {
-			String filename=attachment.getOriginalFilename(); 
-			Emailattach email=om.readValue(emailattach,Emailattach.class);
-			Emailattach eattch=new Emailattach();
+			String filename = attachment.getOriginalFilename();
+			Emailattach email = om.readValue(emailattach, Emailattach.class);
+			Emailattach eattch = new Emailattach();
 			eattch.setToEmail(email.getToEmail());
 			eattch.setSubject(email.getSubject());
 			eattch.setText(email.getText());
 			eattch.setAttachment(attachment.getBytes());
-			mailService.sendattachment(eattch,filename);
+			mailService.sendattachment(eattch, filename);
 			return "Mail sent successfully!!!";
-			
-		}
-		catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			return "Problem in sending mail";
 		}
 	}
-	
-	//http://localhost:9090/GCappps/cibilstatus	
+
+	// http://localhost:9090/GCappps/cibilstatus
 	@PostMapping("/cibilstatus")
-	public String sendcibilstatus(@RequestBody EnquiryDetails enquiryDetails)
-	{
+	public ResponseEntity<BaseResponce<EnquiryDetails>> sendcibilstatus(@RequestBody EnquiryDetails enquiryDetails) {
 		try {
 			mailService.sendcibilstatus(enquiryDetails);
-			return "Mail sent successfully!!!";
-			
-		}
-		catch(Exception e)
-		{
+			BaseResponce<EnquiryDetails> base = new BaseResponce<>(202, "Mail Send Succssfully", enquiryDetails);
+			return new ResponseEntity<BaseResponce<EnquiryDetails>>(base, HttpStatus.ACCEPTED);
+
+		} catch (Exception e) {
 			e.printStackTrace();
-			return "Problem in sending mail";
+			BaseResponce<EnquiryDetails> base = new BaseResponce<>(406, "Mail Sending faild", null);
+			return new ResponseEntity<BaseResponce<EnquiryDetails>>(base, HttpStatus.NOT_ACCEPTABLE);
 		}
-		
+
 	}
-		
-	
-	
-	
-	
-	
 
 }

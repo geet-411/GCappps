@@ -29,6 +29,7 @@ public class EnquiryDetails {
 	private String pancardNumber;
 	private String enquiryStatus;
 	private Integer cibilScore;
+	private Double monthlyIncome;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cibil cibilData;
 }

@@ -2,6 +2,6 @@ package com.GCappps.loanFin.app.enums;
 
 public enum EnquiryStatus {
 
-	Enquired, CibilOK, CibilReject,
+	Enquired, Cibilok, Cibilreject,
 
 }

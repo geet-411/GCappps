@@ -17,7 +17,7 @@ public interface EnquiryServiceI {
 
 	public EnquiryDetails updateEnquiry(EnquiryDetails enquiryDetails);
 
-	public void saveCibilData(EnquiryDetails enqDetails);
+	public EnquiryDetails saveCibilData(EnquiryDetails enqDetails);
 
 	public Optional<EnquiryDetails> getEnquiryByPan(String pancardNumber);
 

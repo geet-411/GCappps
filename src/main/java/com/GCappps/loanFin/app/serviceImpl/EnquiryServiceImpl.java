@@ -49,19 +49,24 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 
 	public EnquiryDetails updateEnquiry(EnquiryDetails enquiryDetails) {
 		
-//		if(enquiryDetails.getCibilScore()>=750) {
-//			
-//		}
-		enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CibilOK));
+		enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.Cibilok));
 
 		EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);
 		return enquiryDetails2;
 	}
 
 	@Override
-	public void saveCibilData(EnquiryDetails enqDetails) {
-		// TODO Auto-generated method stub
-		enquiryRepository.save(enqDetails);
+	public EnquiryDetails saveCibilData(EnquiryDetails enqDetails) {
+		
+
+		if(enqDetails.getCibilScore()>=700) {
+			enqDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.Cibilok));
+		}	
+		else if(enqDetails.getCibilScore()<=750) {
+			enqDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.Cibilreject));
+			
+		}
+		 return enquiryRepository.save(enqDetails);
 	}
 
 	@Override

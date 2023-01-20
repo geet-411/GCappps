@@ -29,12 +29,10 @@ public class EnquiryController {
 
 	@Autowired
 	EnquiryServiceI enquiryServiceI;
-	
+
 	@Autowired
 	RestTemplate rt;
-	
-	@Autowired 
-	EnquiryDetails enqDetails;
+
 
 	// http://localhost:9090/GCappps/enquiry
 	@PostMapping("/enquiry")
@@ -43,6 +41,7 @@ public class EnquiryController {
 		EnquiryDetails enquiryDetails2 = enquiryServiceI.customerEnquiry(enquiryDetails);
 		BaseResponce<EnquiryDetails> base = new BaseResponce<EnquiryDetails>(201, "Data Save Succefully",
 				enquiryDetails2);
+		System.err.println(base);
 		return new ResponseEntity<BaseResponce<EnquiryDetails>>(base, HttpStatus.CREATED);
 	}
 
@@ -69,37 +68,66 @@ public class EnquiryController {
 	}
 
 	// http://localhost:9090/GCappps/cibilscore/enquiryId
-	@PutMapping("/cibilscore/{enquieryId}")
-	public ResponseEntity<BaseResponce<EnquiryDetails>> cibilScoreCheck(@PathVariable String enquieryId,
+//	@PutMapping("/cibilscore/{enquieryId}")
+//	public ResponseEntity<BaseResponce<EnquiryDetails>> cibilScoreCheck(@PathVariable String enquieryId,
+//			@RequestBody EnquiryDetails enquiryDetails) {
+//
+//		Optional<EnquiryDetails> enqu = enquiryServiceI.cibilScoreCheck(enquieryId);
+//		// EnquiryDetails enquiryDetails = enqu.get();
+//		if (enqu.isPresent()) {
+//
+//			EnquiryDetails enquiryDetails2 = enquiryServiceI.updateEnquiry(enquiryDetails);
+//			BaseResponce<EnquiryDetails> base = new BaseResponce<EnquiryDetails>(201, "Customer Cibil Check",
+//					enquiryDetails2);
+//			return new ResponseEntity<BaseResponce<EnquiryDetails>>(base, HttpStatus.CREATED);
+//		}
+//
+//		BaseResponce<EnquiryDetails> base1 = new BaseResponce<EnquiryDetails>(404, "Customer Not Found", null);
+//		return new ResponseEntity<BaseResponce<EnquiryDetails>>(base1, HttpStatus.NOT_FOUND);
+//	}
+	@PutMapping("/CIBILScore/check/{pancardNumber}")
+	public ResponseEntity<BaseResponce<EnquiryDetails>> cibilScoreCheck(@PathVariable String pancardNumber,
 			@RequestBody EnquiryDetails enquiryDetails) {
+		
+//3rd Party API
+		String url = "http://localhost:8080/GCappps/CIBILScore/check/" + pancardNumber;
+		Cibil cibil = rt.getForObject(url, Cibil.class);
 
-		Optional<EnquiryDetails> enqu = enquiryServiceI.cibilScoreCheck(enquieryId);
-		// EnquiryDetails enquiryDetails = enqu.get();
+		System.out.println(cibil);
+		Optional<EnquiryDetails> enqu = enquiryServiceI.getEnquiryByPan(pancardNumber);
 		if (enqu.isPresent()) {
-
-			EnquiryDetails enquiryDetails2 = enquiryServiceI.updateEnquiry(enquiryDetails);
+			EnquiryDetails enq = enqu.get();
+			System.out.println(enq.getEnquiryId());
+			enq.setCibilData(cibil);
+			enq.setCibilScore(cibil.getCibilScore());
+			EnquiryDetails enquiryDetails2 = enquiryServiceI.saveCibilData(enq);
 			BaseResponce<EnquiryDetails> base = new BaseResponce<EnquiryDetails>(201, "Customer Cibil Check",
 					enquiryDetails2);
+//			
 			return new ResponseEntity<BaseResponce<EnquiryDetails>>(base, HttpStatus.CREATED);
+//				
 		}
 
 		BaseResponce<EnquiryDetails> base1 = new BaseResponce<EnquiryDetails>(404, "Customer Not Found", null);
 		return new ResponseEntity<BaseResponce<EnquiryDetails>>(base1, HttpStatus.NOT_FOUND);
 	}
+
 	@GetMapping("/CIBILScore/check/{pancardNumber}")
-	public Cibil cibilUpdate(@PathVariable String pancardNumber){
-		String url="http://localhost:8080/GCappps/CIBILScore/check/"+pancardNumber;
-		Cibil cibil = rt.getForObject(url,Cibil.class);
+	public Cibil cibilUpdate(@PathVariable String pancardNumber) {
+
+		String url = "http://localhost:8080/GCappps/CIBILScore/check/" + pancardNumber;
+		Cibil cibil = rt.getForObject(url, Cibil.class);
+
 		System.out.println(cibil);
 		Optional<EnquiryDetails> enqu = enquiryServiceI.getEnquiryByPan(pancardNumber);
-		if(enqu.isPresent()) {
-			EnquiryDetails enq=enqu.get();
+		if (enqu.isPresent()) {
+			EnquiryDetails enq = enqu.get();
 			System.out.println(enq.getEnquiryId());
-				enq.setCibilData(cibil);
-				enq.setCibilScore(cibil.getCibilScore());
-				enquiryServiceI.saveCibilData(enq);
+			enq.setCibilData(cibil);
+			enq.setCibilScore(cibil.getCibilScore());
+			enquiryServiceI.saveCibilData(enq);
 		}
-		
+
 		return cibil;
 	}
 }

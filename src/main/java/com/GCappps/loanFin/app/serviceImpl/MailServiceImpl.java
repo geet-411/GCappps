@@ -69,8 +69,13 @@ public class MailServiceImpl implements MailServiceI{
 		message.setTo(enquiryDetails.getCustomerEmail());
 		message.setSubject("Regarding GCappps loan enquiry");
 		Integer cibil=enquiryDetails.getCibilScore();
+		double monthlyIncome=enquiryDetails.getMonthlyIncome();
+		double maximunloan=((12*monthlyIncome)*2.5);
+		double emi=((monthlyIncome)/2)-((enquiryDetails.getCibilData().getPreviousEmi())*(0.75));
 		if(cibil>700) {
-			message.setText("Respected Customer,we GCappps family happy to announce that after primary verification of CIBIL Data we found your cibil score " +cibil+" is satisfied,therefore you are eligible to get loan from our FinTech.Get in association RE for further process.");
+			message.setText("Respected Customer, \n \n         We GCappps family happy to announce that after primary verification of CIBIL Data we found your cibil score " +cibil+" is satisfied, therefore you are eligible to get loan from our FinTech. \n       Get in association RE for further process. \n \n Your Enquiry Id is "+enquiryDetails.getEnquiryId() +"\n"
+					+ "Maximum Loan GCappps can provide as per your monthly income="+maximunloan +"\n"
+							+ "Maximum tentative monthly EMI GCappps can arrange after adjusting your Previous EMI="+emi);
 		}
 		else {
 			message.setText("Respected Customer,we GCappps family regret to inform you based on your primary verification of CIBIL Data we found your cibil score " +cibil+" is unsatisfied,therefore you are not eligible to get loan from our FinTech.Hope you will remain associate with GCappps.");

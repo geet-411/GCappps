@@ -49,27 +49,24 @@ public class CustomerController {
 		ObjectMapper om = new ObjectMapper();
 		try {
 			Customer customerRead = om.readValue(customerData, Customer.class);
-			
+
 			Customer customer = new Customer();
 			// int boundedRandomValue = ThreadLocalRandom.current().nextInt(0, 100);
 			// Random CustomerId between 100 to 200
 
 			customerRead.setCustomerId("GCappps-cust-" + ThreadLocalRandom.current().nextInt(100, 200));
 			// from database
-			customerRead.getCustomerCibilScore().setCibilId("GCappps-cibil-"+ThreadLocalRandom.current().nextInt(100, 200)); 
-			customerRead.getDealerData().setDealerId("GCappps-Dealer-"+ThreadLocalRandom.current().nextInt(100, 200));
-			customerRead.getLedger().setLedgerId("GCappps-Ledger-"+ThreadLocalRandom.current().nextInt(100, 200));
-			//All temporary null;
+			customerRead.getCustomerCibilScore()
+					.setCibilId("GCappps-cibil-" + ThreadLocalRandom.current().nextInt(100, 200));
+			customerRead.getDealerData().setDealerId("GCappps-Dealer-" + ThreadLocalRandom.current().nextInt(100, 200));
+			// customerRead.getLedger().setLedgerId("GCappps-Ledger-"+ThreadLocalRandom.current().nextInt(100,
+			// 200));
+			// All temporary null;
 			customerRead.setLoanDisbursement(null);
 			customerRead.setSanctionLetter(null);
 			customerRead.setLedger(null);
-			
-			
-			
-			
-			
 			customerRead.setCustomerVerificationStatus(String.valueOf(CustomerEnum.Applied));
-			
+
 			customer.setCustomerId(customerRead.getCustomerId());
 
 			Documents d1 = new Documents();
@@ -96,7 +93,8 @@ public class CustomerController {
 
 //http://localhost:9090/GCappps/getAllCustomer/{customerVerificationStatus}
 	@GetMapping("/getAllCustomer/{customerVerificationStatus}")
-	public ResponseEntity<BaseResponce<List<Customer>>> getCustomer(@PathVariable String customerVerificationStatus) {
+	public ResponseEntity<BaseResponce<List<Customer>>> getAllCustomer(
+			@PathVariable String customerVerificationStatus) {
 
 		List<Customer> list = customerServiceI.getCustomer(customerVerificationStatus);
 		BaseResponce<List<Customer>> base = new BaseResponce<>(200, "All customer Fetch by status", list);
@@ -137,21 +135,49 @@ public class CustomerController {
 		}
 
 	}
+	// oe ,user ,ac dis 
+		@PutMapping("/withstatus/{customerId}")
+		public ResponseEntity<BaseResponce<Customer>> withstatusUpdate(@RequestBody String customerVerfivcationstatus,
+				@PathVariable String customerId) {
 
-	@PutMapping("/withoutdocupdate/{customerId}")
-	public ResponseEntity<BaseResponce<Customer>> withoutDoc(@RequestBody Customer customer,
-			@PathVariable String customerId) {
+			Optional<Customer> customer1 = customerServiceI.getOneCustomer(customerId);
+			if (customer1.isPresent()) {
+				Customer customer2 = customer1.get();
+				
+				customer2.setCustomerVerificationStatus(customerVerfivcationstatus);// 
+				
+				Customer customer3 = customerServiceI.withoutDoc(customer2);
+				System.out.println("newly updated status "+customer3.getCustomerVerificationStatus());
+				BaseResponce<Customer> base = new BaseResponce<>(201, "Customer Update successfully", customer3);
+				return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
 
-		Optional<Customer> customer1 = customerServiceI.getOneCustomer(customerId);
-		if (customer1.isPresent()) {
-			Customer customer2 = customer1.get();
-			
-			Customer customer3 = customerServiceI.withoutDoc(customer2);
-			BaseResponce<Customer> base = new BaseResponce<>(201, "Customer Update successfully", customer3);
-			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
-
+			}
+			BaseResponce<Customer> base = new BaseResponce<>(404, "Customer Not Updated", null);
+			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_FOUND);
 		}
-		BaseResponce<Customer> base = new BaseResponce<>(404, "Customer Not Updated", null);
-		return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_FOUND);
+//	@PutMapping("/withoutdocupdate/{customerId}")
+//	public ResponseEntity<BaseResponce<Customer>> withoutDoc(@RequestBody Customer customer,
+//			@PathVariable String customerId) {
+//
+//		Optional<Customer> customer1 = customerServiceI.getOneCustomer(customerId);
+//		if (customer1.isPresent()) {
+//			Customer customer2 = customer1.get();
+//
+//			Customer customer3 = customerServiceI.withoutDoc(customer2);
+//			BaseResponce<Customer> base = new BaseResponce<>(201, "Customer Update successfully", customer3);
+//			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
+//
+//		}
+//		BaseResponce<Customer> base = new BaseResponce<>(404, "Customer Not Updated", null);
+//		return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_FOUND);
+//	}
+
+	@GetMapping("/getcustomerbyid/{customerId}")
+	public ResponseEntity<BaseResponce<Customer>> getOneCustomer(@PathVariable String customerId) {
+
+		Optional<Customer> custOpt = customerServiceI.getOneCustomer(customerId);
+		Customer customer = custOpt.get();
+		BaseResponce<Customer> base = new BaseResponce<>(200, "Customer Fetch successfully", customer);
+		return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.OK);
 	}
 }
