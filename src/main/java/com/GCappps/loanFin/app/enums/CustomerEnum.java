@@ -5,14 +5,16 @@ public enum CustomerEnum {
 	
 	Applied , 
 	
-	Verified, 
+
+	Verified , 
 	
-	Rejected, 
+	Rejected , 
 	
-	Customer_Rejected,  
-	
-	Customer_Accepted, 
-	
+		
+
+	Customer_Rejected,  Customer_Accepted, 
+
+
 	Sanction_Genetrated , 
 	
 	Loan_Disbursed, 

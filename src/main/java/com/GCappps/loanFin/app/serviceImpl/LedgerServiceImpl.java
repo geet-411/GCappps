@@ -59,7 +59,7 @@ public class LedgerServiceImpl implements LedgerServiceI{
 	@Override
 	public Ledger ledgergeneration(Customer customer) {
 		int installmentid=ThreadLocalRandom.current().nextInt(999,9999);
-		ledger.setLedgerId("CGappps_Ledger_installment-"+installmentid);
+		ledger.setLedgerId("CGappps_Ledger-"+installmentid);
 		Calendar date = new GregorianCalendar();
 		int year = date.get(Calendar.YEAR);  
 		int month = date.get(Calendar.MONTH);   
@@ -84,7 +84,7 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				Month monthofinstallment= Month.of(x);
 				install.setInstallmentMonth(monthofinstallment+","+year);
 				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
-				install.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
+//				install.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
 				lastdate=monthofinstallment+","+year;
 			}
 			else if(x>12 && x<24) {
@@ -95,7 +95,7 @@ public class LedgerServiceImpl implements LedgerServiceI{
 				install.setInstallmentMonth(monthofinstallment+","+(year+1));
 				lastdate=monthofinstallment+","+(year+1);
 				install.setPaymentStatus(String.valueOf(InstallmentEnum.NA));
-				install.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
+				//install.setInstallmentMonth(String.valueOf(InstallmentEnum.NA));
 			}
 			else if(x==24) {
 				 
@@ -237,8 +237,8 @@ public class LedgerServiceImpl implements LedgerServiceI{
 			if(l.getInstallmentNumber()==installmentnumber) {
 				
 				l.setPaymentStatus(String.valueOf(InstallmentEnum.UnPaid));
-//				Date date=new Date();
-//				l.setInstallementPaidDate(date);
+				Date date=new Date();
+				l.setInstallementPaidDate(date);
 				ledger.setTenure(addInstallment+1);
 				x++;
 				SimpleMailMessage message=new SimpleMailMessage();
