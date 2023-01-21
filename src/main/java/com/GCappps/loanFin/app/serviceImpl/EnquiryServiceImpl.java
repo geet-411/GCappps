@@ -49,6 +49,7 @@ public class EnquiryServiceImpl implements EnquiryServiceI {
 
 	public EnquiryDetails updateEnquiry(EnquiryDetails enquiryDetails) {
 		
+
 		enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.Cibilok));
 
 		EnquiryDetails enquiryDetails2 = enquiryRepository.save(enquiryDetails);

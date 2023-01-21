@@ -23,7 +23,6 @@ public class Installment {
 	private Integer installmentId;
 	private Integer installmentNumber;
 	private String installmentMonth;
-	@CreationTimestamp
 	private Date installementPaidDate;
 	private String paymentStatus;
 	
