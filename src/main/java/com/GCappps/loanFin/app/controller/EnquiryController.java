@@ -89,7 +89,7 @@ public class EnquiryController {
 	public ResponseEntity<BaseResponce<EnquiryDetails>> cibilScoreCheck(@PathVariable String pancardNumber,
 			@RequestBody EnquiryDetails enquiryDetails) {
 		
-//3rd Party API
+        //3rd Party API
 		String url = "http://localhost:8080/GCappps/CIBILScore/check/" + pancardNumber;
 		Cibil cibil = rt.getForObject(url, Cibil.class);
 

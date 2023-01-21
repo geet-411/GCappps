@@ -59,7 +59,7 @@ public class CustomerController {
 
 			if (enquiry1.isEmpty()) {
 
-				BaseResponce<Customer> base = new BaseResponce<>(200, "You are not eligible Customer ",customerRead);
+				BaseResponce<Customer> base = new BaseResponce<>(200, "You are not eligible Customer ", customerRead);
 				return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.OK);
 
 			}
@@ -101,12 +101,7 @@ public class CustomerController {
 			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_ACCEPTABLE);
 		}
 
-//		BaseResponce<Customer> base = new BaseResponce<>(406, "You are not eligible Customer ",null);
-//		return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_ACCEPTABLE);
-
 	}
-
-	// return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.CREATED);
 
 //http://localhost:9090/GCappps/getAllCustomer/{customerVerificationStatus}
 	@GetMapping("/getAllCustomer/{customerVerificationStatus}")
@@ -194,8 +189,16 @@ public class CustomerController {
 	public ResponseEntity<BaseResponce<Customer>> getOneCustomer(@PathVariable String customerId) {
 
 		Optional<Customer> custOpt = customerServiceI.getOneCustomer(customerId);
-		Customer customer = custOpt.get();
-		BaseResponce<Customer> base = new BaseResponce<>(200, "Customer Fetch successfully", customer);
-		return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.OK);
-	}
+		if(custOpt.isPresent()) {
+			Customer customer = custOpt.get();
+			BaseResponce<Customer> base = new BaseResponce<>(200, "Customer Fetch successfully", customer);
+			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.OK);
+		
+		}
+		else {
+				BaseResponce<Customer> base = new BaseResponce<>(404, "Customer Not Found", null);
+			return new ResponseEntity<BaseResponce<Customer>>(base, HttpStatus.NOT_FOUND);
+		
+		}
+		}
 }

@@ -21,6 +21,7 @@ public class LoanDisbursementController {
 	
 	@Autowired
 	LoanDisbursementserviceI loandisb;
+	
 	//http://localhost:9090/GCappps/loandisburse
 	@PostMapping("/loandisburse")
 	public ResponseEntity<BaseResponce<LoanDisbursement>> loandisbursement(@RequestBody Customer customer){
